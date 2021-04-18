@@ -26,9 +26,11 @@ services:
     container_name: sqlserver
     hostname: sqlserver
     restart: always
+    env_file:
+      - sqlserver.env
     environment:
       ACCEPT_EULA: 'Yes'
-      SA_PASSWORD: '5fbR(DKr'
+      SA_PASSWORD: "${SQLSERVER_SA_USER_PASSWORD}"
       MSSQL_PID: 'Developer'
     ports:
       - "127.0.0.1:1433:1433"

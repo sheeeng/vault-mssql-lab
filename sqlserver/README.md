@@ -84,6 +84,6 @@ msdb
 System: MS SQL (Beta)
 Server: sqlserver
 Username: sa
-Password: 5fbR(DKr
+Password: CHANGEME
 Database: master
 ```

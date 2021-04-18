@@ -5,10 +5,31 @@ A small lab for playing with Hashicorp Vault and SQL Server
 Blog posting using this repo:
 https://www.hindenes.com/2017-07-07_Automating-SQL-Server-credential-rotation-using-Hashicorp-Vault-b71792d9c227/
 
+## Prerequisites
+
+- Use [direnv](https://direnv.net/). Create a [.envrc](.envrc) file with the following content.
+
+```text
+source_env_if_exists ${HOME}/.envrc
+export SQLSERVER_SA_USER_NAME='SA'
+export SQLSERVER_SA_USER_PASSWORD='CHANGEME'
+```
+
+- Create a [sqlserver.env](sqlserver.env) file with the following content.
+
+```text
+source_env_if_exists ${HOME}/.envrc
+export SQLSERVER_SA_USER_NAME='SA'
+export SQLSERVER_SA_USER_PASSWORD='CHANGEME'
+```
+
 ## Getting Started
 
 ```bash
 docker compose up
+```
+
+```bash
 docker compose down --remove-orphans --rmi local --volumes
 ```
 
@@ -75,6 +96,17 @@ docker exec -it \
 
 ```bash
 docker exec -it \
+    --env SQLSERVER_SA_USER_PASSWORD="${SQLSERVER_SA_USER_PASSWORD}" \
+    $(docker ps --filter "name=vault" --quiet)  \
+    sh -c "\
+    VAULT_ADDR='http://127.0.0.1:8200' \
+    echo \"${SQLSERVER_SA_USER_PASSWORD}\" \
+    "
+```
+
+```bash
+docker exec -it \
+    --env SQLSERVER_SA_USER_PASSWORD="${SQLSERVER_SA_USER_PASSWORD}" \
     $(docker ps --filter "name=vault" --quiet)  \
     sh -c "\
     VAULT_ADDR='http://127.0.0.1:8200' \
@@ -83,7 +115,7 @@ docker exec -it \
         connection_url='sqlserver://{{username}}:{{password}}@sqlserver:1433' \
         allowed_roles='readonly' \
         username='SA' \
-        password='5fbR(DKr' \
+        password=\"${SQLSERVER_SA_USER_PASSWORD}\" \
         "
 ```
 
@@ -96,14 +128,6 @@ docker exec -it \
     $(docker ps --filter "name=vault" --quiet)  \
     sh -c "VAULT_ADDR='http://127.0.0.1:8200' \
     vault policy write readonly readonly-policies.hcl"
-```
-
-```bash
-docker exec -it \
-    $(docker ps --filter "name=sqlserver" --quiet)  \
-     /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
-    -Q 'CREATE DATABASE AcmeDatabase;'
 ```
 
 ```bash
@@ -131,11 +155,11 @@ docker exec -it \
 ```text
 Key                Value
 ---                -----
-lease_id           database/creds/readonly/nVOZWqRQmNOjM7AvscfZhwYA
+lease_id           database/creds/readonly/3MuWGdeVBktTcphQV7a73fv0
 lease_duration     10m
 lease_renewable    true
-password           XgB5JgXRTVn-FSTUwqqU
-username           v-root-readonly-s1hzEDnj0TOY2Ku713z0-1618774260
+password           RJUg-lszsds7glHqAzIT
+username           v-root-readonly-RABRBXJNyDhFksDwLbZO-1618775846
 ```
 
 ```bash

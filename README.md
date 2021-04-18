@@ -37,7 +37,6 @@ docker compose down --remove-orphans --rmi local --volumes
 
 This section supplements this [guide](https://learn.hashicorp.com/tutorials/vault/database-secrets).
 
-
 ```bash
 docker exec -it \
     $(docker ps --filter "name=vault" --quiet)  \

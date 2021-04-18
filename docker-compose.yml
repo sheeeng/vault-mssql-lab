@@ -1,32 +1,54 @@
-version: '2'
+version: "3.9"
 services:
-  vault: 
+  vault:
+    image: library/vault:1.7.0
     container_name: vault
-    build: ./vault
-    links:
-      - sqlserver:sqlserver
+    hostname: vault
     ports:
-      - 8200:8200
-    environment:
-      VAULT_ADDR: http://localhost:8200
+      - "127.0.0.1:8200:8200"
     volumes:
-     - /c/Users/trond/Documents/projects/vault-dev:/vaultdev #you probably have to adjust this
+      - ${PWD}/vault/file:/vault/file:rw
+      - ${PWD}/vault/config:/vault/config:rw
+      - ${PWD}/vault/administrative-policies.hcl:/administrative-policies.hcl:rw
+      - ${PWD}/vault/readonly-policies.hcl:/readonly-policies.hcl:rw
+      - ${PWD}/vault/readonly.sql:/readonly.sql:rw
+    environment:
+      - EXAMPLE=example
+    # This is required in order for Vault to lock memory,
+    # which prevents it from being swapped to disk.
+    cap_add:
+      - IPC_LOCK
+    entrypoint: >
+      vault server
+      -config=/vault/config/vault.hcl
   sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-CU10-ubuntu-20.04
     container_name: sqlserver
-    image: microsoft/mssql-server-linux
+    hostname: sqlserver
+    restart: always
     environment:
-      ACCEPT_EULA: Y
-      SA_PASSWORD: MyPassword123
+      ACCEPT_EULA: 'Yes'
+      SA_PASSWORD: '5fbR(DKr'
+      MSSQL_PID: 'Developer'
     ports:
-      - 1433:1433
-  app: 
-    container_name: app
-    build: ./app
-    links:
-      - vault:vault
-      - sqlserver:sqlserver
-    environment:
-      ROLE_ID: test
-      SECRET_ID: 9b10b201-8aaa-dfb8-6dda-e7d9af1f3d19
-      VAULT_URL: http://vault:8200
-      SQL_SERVER_ADDR: sqlserver
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - ${PWD}/sqlserver/InsertRandomData.sql:/InsertRandomData.sql:rw
+  adminer:
+    image: library/adminer:4.8.0
+    container_name: adminer
+    hostname: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  # app:
+  #   container_name: app
+  #   build: ./app
+  #   links:
+  #     - vault:vault
+  #     - sqlserver:sqlserver
+  #   environment:
+  #     ROLE_ID: test
+  #     SECRET_ID: 9b10b201-8aaa-dfb8-6dda-e7d9af1f3d19
+  #     VAULT_URL: http://vault:8200
+  #     SQL_SERVER_ADDR: sqlserver

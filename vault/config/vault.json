@@ -1,0 +1,19 @@
+{
+  "listener":  {
+    "tcp":  {
+      "address":  "0.0.0.0:8200",
+      "_comments": "Although the listener stanza disables TLS for this example, Vault should always be used with TLS in production to provide secure communication between clients and the Vault server. It requires a certificate file and key file on each Vault host.",
+      "tls_disable":  "true"
+    }
+  },
+  "backend": {
+    "file": {
+      "path": "/vault/file"
+    }
+  },
+  "_comments": "This runs a Vault server using the file storage backend at path /vault/file, with a default secret lease duration of one week and a maximum of 30 days.",
+  "default_lease_ttl": "168h",
+  "max_lease_ttl": "720h",
+  "api_addr": "http://0.0.0.0:8200",
+  "ui": "true"
+}

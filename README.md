@@ -169,3 +169,7 @@ docker exec -it \
     vault list -format=json sys/leases/lookup/database/creds/readonly \
     " | jq -r ".[]"
 ```
+
+```text
+vault        | 2021-04-18T20:25:10.092Z [INFO]  expiration: revoked lease: lease_id=database/creds/readonly/rQUWrLmPMiF1iwZ3cyOp7TTL
+```

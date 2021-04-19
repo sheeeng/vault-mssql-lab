@@ -26,7 +26,7 @@ sqlcmd \
     -U "${SQL_SERVER_USER_NAME}" \
     -P "${SQL_SERVER_USER_PASSWORD}" \
     -d "${SQL_DATABASE_NAME}" \
-    -i "CreateTestData.sql"
+    -i "InsertData.sql"
 ```
 
 ## Drop Table
@@ -38,28 +38,4 @@ sqlcmd \
     -P "${SQL_SERVER_USER_PASSWORD}" \
     -d "${SQL_DATABASE_NAME}" \
     -Q "DROP TABLE TestSchema.AcmeTable; DROP SCHEMA TestSchema;"
-```
-
-## Optional
-
-[Debug](https://opensource.com/article/20/6/debug-go-delve) using Delve library.
-
-```bash
-go get -u -v github.com/go-delve/delve/cmd/dlv
-ls -aln $GOPATH/bin/dlv
-```
-
-[Test](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-query-go) connection string using Go.
-
-```bash
-go get -u -v github.com/denisenkom/go-mssqldb
-go install -v github.com/denisenkom/go-mssqldb@latest
-```
-
-Install the tools.
-
-```bash
-brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
-brew update
-brew install msodbcsql mssql-tools
 ```

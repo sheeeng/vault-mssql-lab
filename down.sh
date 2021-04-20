@@ -22,4 +22,4 @@ trap cleanUp EXIT
 
 # ----------------------------------------------------------------------
 
-docker compose down --remove-orphans --rmi local --volumes
+docker-compose down --remove-orphans --rmi local --volumes

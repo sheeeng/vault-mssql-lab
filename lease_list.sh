@@ -22,22 +22,10 @@ trap cleanUp EXIT
 
 # ----------------------------------------------------------------------
 
-docker-compose \
-    --file docker-compose-vault-agent-template.yml \
-    down \
-    --remove-orphans \
-    --volumes
+[[ -z "${VAULT_ADDR}" ]] && echo "\${VAULT_ADDR} environment variable is not available."
+echo "\${VAULT_ADDR}:${VAULT_ADDR}";
 
-docker-compose \
-    --file docker-compose-vault-agent-template.yml \
-    rm
+[[ -z "${VAULT_TOKEN}" ]] && echo "\${VAULT_TOKEN} environment variable is not available."
+echo "\${VAULT_TOKEN}:${VAULT_TOKEN}";
 
-docker-compose \
-    --file docker-compose-vault-agent-token.yml \
-    down \
-    --remove-orphans \
-    --volumes
-
-docker-compose \
-    --file docker-compose-vault-agent-token.yml \
-    rm
+vault list sys/leases/lookup/project-acme/database/creds/project-acme-role

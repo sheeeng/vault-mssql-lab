@@ -1,0 +1,15 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    {{- with secret "project-acme/database/creds/project-acme-role" }}
+    "Database": "Server=.;Database=HashiCorp;user id={{ .Data.username }};password={{ .Data.password }}"
+    {{- end }}
+  }
+}

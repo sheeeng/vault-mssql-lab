@@ -4,6 +4,9 @@ services:
     image: library/vault:1.7.0
     container_name: vault
     hostname: vault
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.2
     ports:
       - "127.0.0.1:8200:8200"
     volumes:
@@ -42,6 +45,9 @@ services:
     container_name: sqlserver
     hostname: sqlserver
     restart: always
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.3
     env_file:
       - sqlserver.env
     environment:
@@ -52,13 +58,6 @@ services:
       - "127.0.0.1:1433:1433"
     volumes:
       - ${PWD}/sqlserver/InsertRandomData.sql:/InsertRandomData.sql:rw
-  adminer:
-    image: library/adminer:4.8.0
-    container_name: adminer
-    hostname: adminer
-    restart: always
-    ports:
-      - 8080:8080
   # app:
   #   container_name: app
   #   build: ./app
@@ -70,3 +69,19 @@ services:
   #     SECRET_ID: 9b10b201-8aaa-dfb8-6dda-e7d9af1f3d19
   #     VAULT_URL: http://vault:8200
   #     SQL_SERVER_ADDR: sqlserver
+  adminer:
+    image: library/adminer:4.8.0
+    container_name: adminer
+    hostname: adminer
+    restart: always
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
+    ports:
+      - 8080:8080
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

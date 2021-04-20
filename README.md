@@ -173,3 +173,29 @@ docker exec -it \
 ```text
 vault        | 2021-04-18T20:25:10.092Z [INFO]  expiration: revoked lease: lease_id=database/creds/readonly/rQUWrLmPMiF1iwZ3cyOp7TTL
 ```
+
+```text
+https://localhost:5001/swagger/index.html
+```
+
+```bash
+curl \
+  --show-error \
+  --silent \
+  --header  "accept: text/plain" \
+  --request GET \
+  --insecure \
+  "https://localhost:5001/api/Projects" \
+  | jq
+```
+
+```bash
+curl \
+  --show-error \
+  --silent \
+  --header  "accept: text/plain" \
+  --request GET \
+  --insecure \
+  "https://localhost:5001/api/Projects/Vault" \
+  | jq
+```

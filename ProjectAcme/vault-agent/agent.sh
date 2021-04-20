@@ -22,22 +22,4 @@ trap cleanUp EXIT
 
 # ----------------------------------------------------------------------
 
-docker-compose \
-    --file docker-compose-vault-agent-template.yml \
-    down \
-    --remove-orphans \
-    --volumes
-
-docker-compose \
-    --file docker-compose-vault-agent-template.yml \
-    rm
-
-docker-compose \
-    --file docker-compose-vault-agent-token.yml \
-    down \
-    --remove-orphans \
-    --volumes
-
-docker-compose \
-    --file docker-compose-vault-agent-token.yml \
-    rm
+vault agent --config=/vault/ProjectAcme/vault-agent/config-vault-agent-template.hcl

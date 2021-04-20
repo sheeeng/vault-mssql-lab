@@ -22,5 +22,5 @@ INSERT INTO AcmeSchema.AcmeTable (RandomString, RandomDateTime) VALUES
   (LEFT(REPLACE(NEWID(),'-',''),8), FORMAT(GetUtcDate(),'yyyy-MM-ddTHH:mm:ss.ff')+"Z");
 GO
 
-SELECT TOP (50) * FROM AcmeSchema.AcmeTable ;
+SELECT TOP (50) * FROM AcmeSchema.AcmeTable;
 GO

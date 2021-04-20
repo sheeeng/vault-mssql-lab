@@ -39,3 +39,11 @@ sqlcmd \
     -d "${SQL_DATABASE_NAME}" \
     -Q "DROP TABLE TestSchema.AcmeTable; DROP SCHEMA TestSchema;"
 ```
+
+## Miscellaneous
+
+```text
+https://www.hashicorp.com/blog/learn-vault-client-dotnet
+https://learn.hashicorp.com/tutorials/vault/dotnet-vault-agent
+https://github.com/hashicorp/vault-guides/tree/master/secrets/dotnet-vault
+```

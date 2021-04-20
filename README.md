@@ -11,16 +11,16 @@ https://www.hindenes.com/2017-07-07_Automating-SQL-Server-credential-rotation-us
 
 ```text
 source_env_if_exists ${HOME}/.envrc
-export SQLSERVER_SA_USER_NAME='SA'
-export SQLSERVER_SA_USER_PASSWORD='CHANGEME'
+export SQL_SERVER_USER_NAME='SA'
+export SQL_SERVER_USER_PASSWORD='CHANGEME'
 ```
 
 - Create a [sqlserver.env](sqlserver.env) file with the following content.
 
 ```text
 source_env_if_exists ${HOME}/.envrc
-export SQLSERVER_SA_USER_NAME='SA'
-export SQLSERVER_SA_USER_PASSWORD='CHANGEME'
+export SQL_SERVER_USER_NAME='SA'
+export SQL_SERVER_USER_PASSWORD='CHANGEME'
 ```
 
 ## Getting Started
@@ -95,17 +95,17 @@ docker exec -it \
 
 ```bash
 docker exec -it \
-    --env SQLSERVER_SA_USER_PASSWORD="${SQLSERVER_SA_USER_PASSWORD}" \
+    --env SQL_SERVER_USER_PASSWORD="${SQL_SERVER_USER_PASSWORD}" \
     $(docker ps --filter "name=vault" --quiet)  \
     sh -c "\
     VAULT_ADDR='http://127.0.0.1:8200' \
-    echo \"${SQLSERVER_SA_USER_PASSWORD}\" \
+    echo \"${SQL_SERVER_USER_PASSWORD}\" \
     "
 ```
 
 ```bash
 docker exec -it \
-    --env SQLSERVER_SA_USER_PASSWORD="${SQLSERVER_SA_USER_PASSWORD}" \
+    --env SQL_SERVER_USER_PASSWORD="${SQL_SERVER_USER_PASSWORD}" \
     $(docker ps --filter "name=vault" --quiet)  \
     sh -c "\
     VAULT_ADDR='http://127.0.0.1:8200' \
@@ -114,7 +114,7 @@ docker exec -it \
         connection_url='sqlserver://{{username}}:{{password}}@sqlserver:1433' \
         allowed_roles='readonly' \
         username='SA' \
-        password=\"${SQLSERVER_SA_USER_PASSWORD}\" \
+        password=\"${SQL_SERVER_USER_PASSWORD}\" \
         "
 ```
 

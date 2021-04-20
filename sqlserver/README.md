@@ -8,7 +8,7 @@
 docker exec -it \
     $(docker ps --filter "name=sqlserver" --quiet)  \
      /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
+    -S localhost -U 'SA' -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q 'SELECT @@VERSION'
 ```
 
@@ -25,7 +25,7 @@ Microsoft SQL Server 2019 (RTM-CU10) (KB5001090) - 15.0.4123.1 (X64)
 docker exec -it \
     $(docker ps --filter "name=sqlserver" --quiet)  \
      /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
+    -S localhost -U 'SA' -P "${SQL_SERVER_USER_PASSWORD}" \
     -i "InsertRandomData.sql"
 ```
 
@@ -33,7 +33,7 @@ docker exec -it \
 docker exec -it \
     $(docker ps --filter "name=sqlserver" --quiet)  \
      /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
+    -S localhost -U 'SA' -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q "INSERT INTO AcmeSchema.AcmeTable (RandomString, RandomDateTime) VALUES (N'ABCD1234', N'1970-01-01T00:00:00.00Z');"
 ```
 
@@ -43,7 +43,7 @@ docker exec -it \
 docker exec -it \
     $(docker ps --filter "name=sqlserver" --quiet)  \
      /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
+    -S localhost -U 'SA' -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q 'SELECT TOP (50) * FROM AcmeSchema.AcmeTable;'
 ```
 
@@ -53,7 +53,7 @@ docker exec -it \
 docker exec -it \
     $(docker ps --filter "name=sqlserver" --quiet)  \
      /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
+    -S localhost -U 'SA' -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q 'SELECT * FROM master.sys.database_principals WHERE name LIKE "v-root%";'
 ```
 
@@ -63,7 +63,7 @@ docker exec -it \
 docker exec -it \
     $(docker ps --filter "name=sqlserver" --quiet)  \
      /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U 'SA' -P "${SQLSERVER_SA_USER_PASSWORD}" \
+    -S localhost -U 'SA' -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q 'SELECT name FROM master.sys.databases;'
 ```
 

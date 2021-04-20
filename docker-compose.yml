@@ -21,8 +21,24 @@ services:
     entrypoint: >
       vault server
       -config=/vault/config/vault.hcl
+  # vault-agent:
+  #   image: library/vault:1.7.0
+  #   container_name: vault-agent
+  #   hostname: vault-agent
+  #   restart: always
+  #   command: [
+  #     'vault',
+  #     'agent',
+  #     '-config=/opt/vault-agent/config-vault-agent-template.hcl'
+  #   ]
+  #   volumes:
+  #     - ${PWD}/vault-agent:/opt/vault-agent:rw
+  #   cap_add:
+  #     - IPC_LOCK
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-CU10-ubuntu-20.04
+    build:
+      context: ${PWD}/sqlserver
+      dockerfile: Dockerfile
     container_name: sqlserver
     hostname: sqlserver
     restart: always
@@ -30,7 +46,7 @@ services:
       - sqlserver.env
     environment:
       ACCEPT_EULA: 'Yes'
-      SA_PASSWORD: "${SQLSERVER_SA_USER_PASSWORD}"
+      SA_PASSWORD: "${SQL_SERVER_USER_PASSWORD}"
       MSSQL_PID: 'Developer'
     ports:
       - "127.0.0.1:1433:1433"

@@ -32,7 +32,7 @@ vault write project-acme/database/roles/project-acme-role \
     db_name=acme-sql-server \
     creation_statements=" \
         CREATE LOGIN [{{name}}] WITH PASSWORD = '{{password}}'; \
-        USE [master]; \
+        USE HashiCorp; \
         CREATE USER [{{name}}] FOR LOGIN [{{name}}]; \
         GRANT SELECT,UPDATE,INSERT,DELETE TO [{{name}}]; \
         " \

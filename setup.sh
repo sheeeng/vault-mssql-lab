@@ -40,8 +40,13 @@ done
 
 vault login ${VAULT_TOKEN}
 
-vault secrets enable -path='project-acme/database' database || true
-vault secrets enable -path='project-acme/secrets' -version=2 kv || true
+vault secrets disable 'project-acme/secrets'
+vault auth disable approle
+vault lease revoke -prefix 'project-acme/database'
+vault secrets disable 'project-acme/database'
+
+vault secrets enable -path='project-acme/database' database
+vault secrets enable -path='project-acme/secrets' -version=2 kv
 
 vault kv put project-acme/secrets/static 'password=Testing!123'
 
@@ -60,17 +65,19 @@ vault write project-acme/database/roles/project-acme-role \
         CREATE USER [{{name}}] FOR LOGIN [{{name}}]; \
         GRANT SELECT,UPDATE,INSERT,DELETE TO [{{name}}]; \
         " \
-    default_ttl="10m" \
-    max_ttl="20m"
+    default_ttl="2m" \
+    max_ttl="5m"
 
 vault policy write project-acme ./project-role-policy.hcl
 
-vault auth enable approle || true
+
+vault auth enable approle
+
 vault write auth/approle/role/project-acme-role \
     role_id="project-acme-role" \
     token_policies="project-acme" \
-    token_ttl=10m \
-    token_max_ttl=20m \
+    token_ttl=1h \
+    token_max_ttl=2h \
     secret_id_num_uses=5
 
 echo "project-acme-role" > "${SCRIPT_DIRECTORY}/ProjectAcme/vault-agent/role-id"

@@ -1,6 +1,5 @@
-version: "3.3"
+version: "3.9"
 services:
-
   vault-agent:
     image: vault:1.7.0
     restart: always
@@ -16,8 +15,7 @@ services:
     networks:
       vpcbr:
         ipv4_address: 10.5.0.4
-
 networks:
   vpcbr:
     external:
-      name: vault-mssql-lab_vpcbr
+      name: vault-mssql_vpcbr

@@ -22,9 +22,18 @@ trap cleanUp EXIT
 
 # ----------------------------------------------------------------------
 
-docker-compose \
-    --file docker-compose.yml \
-    down \
-    --remove-orphans \
-    --rmi local \
-    --volumes
+[[ -z "${VAULT_ADDR}" ]] && echo "\${VAULT_ADDR} environment variable is not available."
+echo "\${VAULT_ADDR}:${VAULT_ADDR}";
+
+[[ -z "${VAULT_TOKEN}" ]] && echo "\${VAULT_TOKEN} environment variable is not available."
+echo "\${VAULT_TOKEN}:${VAULT_TOKEN}";
+
+LEASE_ID=$(vault list \
+    -format=json \
+    sys/leases/lookup/project-acme/database/creds/project-acme-role \
+    | jq --raw-output ".[-1]")
+echo "\${LEASE_ID}: ${LEASE_ID}"
+
+vault lease \
+    renew \
+    project-acme/database/creds/project-acme-role/${LEASE_ID}

@@ -42,7 +42,7 @@ vault login ${VAULT_TOKEN}
 
 vault secrets disable 'project-acme/secrets'
 vault auth disable approle
-vault lease revoke -prefix 'project-acme/database'
+vault lease revoke --force -prefix 'project-acme/database'
 vault secrets disable 'project-acme/database'
 
 vault secrets enable -path='project-acme/database' database

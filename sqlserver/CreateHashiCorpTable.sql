@@ -1,7 +1,7 @@
-CREATE DATABASE HashiCorp;
-GO
-USE HashiCorp;
-GO
+-- CREATE DATABASE IF NOT EXISTS HashiCorp;
+-- GO
+-- USE HashiCorp;
+-- GO
 DROP TABLE IF EXISTS Projects;
 GO
 CREATE TABLE Projects(

@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
 set -o errexit
-# set -o xtrace
-
-# Wait for the SQL Server.
-sleep 10s
+set -o xtrace
 
 [[ -z "${SQL_SERVER_USER_NAME}" ]] && echo "\${SQL_SERVER_USER_NAME} environment variable is not available."
 echo "\${SQL_SERVER_USER_NAME}:${SQL_SERVER_USER_NAME}";
@@ -12,8 +9,8 @@ echo "\${SQL_SERVER_USER_NAME}:${SQL_SERVER_USER_NAME}";
 [[ -z "${SQL_SERVER_USER_PASSWORD}" ]] && echo "\${SQL_SERVER_USER_PASSWORD} environment variable is not available."
 echo "\${SQL_SERVER_USER_PASSWORD}:${SQL_SERVER_USER_PASSWORD}";
 
-/opt/mssql-tools/bin/sqlcmd \
-    -S 'localhost' \
+/usr/local/bin/sqlcmd \
+    -S "${SQL_SERVER_NAME}" \
     -U "${SQL_SERVER_USER_NAME}" \
     -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q 'SELECT @@VERSION'
@@ -24,30 +21,41 @@ echo "\${SQL_SERVER_USER_PASSWORD}:${SQL_SERVER_USER_PASSWORD}";
     -P "${SQL_SERVER_USER_PASSWORD}" \
     -Q 'CREATE DATABASE IF NOT EXISTS HashiCorp;'
 
-/opt/mssql-tools/bin/sqlcmd \
-    -S 'localhost' \
+/usr/local/bin/sqlcmd \
+    -S "${SQL_SERVER_NAME}" \
     -U "${SQL_SERVER_USER_NAME}" \
     -P "${SQL_SERVER_USER_PASSWORD}" \
-    -d 'master' \
+    -d 'HashiCorp' \
     -i CreateHashiCorpTable.sql
 
-/opt/mssql-tools/bin/bcp \
-    Projects in /usr/src/app/projects.csv \
-    -S 'localhost' \
+/usr/local/bin/bcp \
+    Projects in projects.csv \
+    -S "${SQL_SERVER_NAME}" \
     -U "${SQL_SERVER_USER_NAME}" \
     -P "${SQL_SERVER_USER_PASSWORD}" \
     -d 'HashiCorp' \
     -c \
     -t ','
 
-/opt/mssql-tools/bin/sqlcmd \
-    -S 'localhost' \
-    -U "${SQL_SERVER_USER_NAME}" \
-    -P "${SQL_SERVER_USER_PASSWORD}" \
-    -Q 'SELECT TOP (50) * FROM HashiCorp.dbo.Projects;'
+# Ignore the errors. Import works.
+#
+# Starting copy...
+# SQLState = 22005, NativeError = 0
+# Error = [Microsoft][ODBC Driver 17 for SQL Server]Invalid character value for cast specification
 
-/opt/mssql-tools/bin/sqlcmd \
-    -S 'localhost' \
+# 8 rows copied.
+# Network packet size (bytes): 4096
+# Clock Time (ms.) Total     : 53     Average : (150.9 rows per sec.)
+
+/usr/local/bin/sqlcmd \
+    -S "${SQL_SERVER_NAME}" \
     -U "${SQL_SERVER_USER_NAME}" \
     -P "${SQL_SERVER_USER_PASSWORD}" \
-    -i "InsertRandomData.sql"
+    -d 'HashiCorp' \
+    -Q 'SELECT TOP (50) * FROM Projects;'
+
+# /usr/local/bin/sqlcmd \
+#     -S "${SQL_SERVER_NAME}" \
+#     -U "${SQL_SERVER_USER_NAME}" \
+#     -P "${SQL_SERVER_USER_PASSWORD}" \
+#     -i "InsertRandomData.sql"

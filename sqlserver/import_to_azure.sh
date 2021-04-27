@@ -37,6 +37,22 @@ echo "\${SQL_SERVER_USER_PASSWORD}:${SQL_SERVER_USER_PASSWORD}";
     -c \
     -t ','
 
+/usr/local/bin/sqlcmd \
+    -S "${SQL_SERVER_NAME}" \
+    -U "${SQL_SERVER_USER_NAME}" \
+    -P "${SQL_SERVER_USER_PASSWORD}" \
+    -d 'deletemetest_mssqldb-dev' \
+    -i CreateHashiCorpTable.sql
+
+/usr/local/bin/bcp \
+    Projects in projects.csv \
+    -S "${SQL_SERVER_NAME}" \
+    -U "${SQL_SERVER_USER_NAME}" \
+    -P "${SQL_SERVER_USER_PASSWORD}" \
+    -d 'deletemetest_mssqldb-dev' \
+    -c \
+    -t ','
+
 # Ignore the errors. Import works.
 #
 # Starting copy...
@@ -52,6 +68,13 @@ echo "\${SQL_SERVER_USER_PASSWORD}:${SQL_SERVER_USER_PASSWORD}";
     -U "${SQL_SERVER_USER_NAME}" \
     -P "${SQL_SERVER_USER_PASSWORD}" \
     -d 'HashiCorp' \
+    -Q 'SELECT TOP (50) * FROM Projects;'
+
+/usr/local/bin/sqlcmd \
+    -S "${SQL_SERVER_NAME}" \
+    -U "${SQL_SERVER_USER_NAME}" \
+    -P "${SQL_SERVER_USER_PASSWORD}" \
+    -d 'deletemetest_mssqldb-dev' \
     -Q 'SELECT TOP (50) * FROM Projects;'
 
 # /usr/local/bin/sqlcmd \
